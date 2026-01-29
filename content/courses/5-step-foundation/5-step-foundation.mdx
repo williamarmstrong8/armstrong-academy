@@ -1,0 +1,185 @@
+---
+title: "The 5-Step Foundation"
+description: "Initialize a scalable Next.js + shadcn architecture in under 5 minutes."
+difficulty: "Beginner"
+---
+
+<Summary title="What we will build">
+
+We are going to build a new website from scratch using Next.js. We will set up the styling, organize our page routing, and install the essential component library needed for our user interface.
+
+</Summary>
+
+## 1. The Basics
+
+The fundamentals are that we need to set up our site with the proper framework. We will use Next.js, Tailwind CSS, and TypeScript. This is called our framework.
+
+To start we have to create the app in our terminal in cursor. Paste this in to create a react app with the default settings.
+
+<CodeWindow title="Terminal" isTerminal>
+  pnpm create next-app@latest my-app --yes
+  cd my-app
+  pnpm dev
+</CodeWindow>
+
+We will also use shadcn/ui, which is a library of components that have great design, function, and features built-in.
+
+<CodeWindow title="Terminal" isTerminal>
+  pnpm dlx shadcn@latest init
+</CodeWindow>
+
+## 2. Styling
+
+Next we will setup the style of our site. This is where you can get really creative and differentiate your site from others.
+
+Your global or site wide styling lives here. If you make changes here they change for your entire website.
+
+<RouteVisualizer
+  files={[
+    { type: 'folder', name: 'app', level: 0 },
+    { type: 'file', name: 'global.css', level: 1 },
+  ]}
+/>
+
+In here you can define styling choices like hear font, color, size, then reference them in your code so you don't need to specify or worry about consistency across pages.
+
+## 3. Pages and routes
+
+Next.js uses a very intuitve way to think about pages. If there is a page.tsx in a folder, that folder name becomes the url path. For example in app a folder called About with page.tsx in it is routed to with /about.
+
+<RouteVisualizer
+  files={[
+    { type: 'folder', name: 'app', level: 0 },
+    { type: 'folder', name: 'about', level: 1 },
+    { type: 'file', name: 'page.tsx', level: 2 },
+  ]}
+  route="portfolio.com/about"
+/>
+
+We also have layout.tsx that acts as a layout for your site. This allows paages to render without needing to refresh the page. It also means if you add components like a nav bar to them, that nav bar will appear for all pages within that layout.
+
+<RouteVisualizer
+  files={[
+    { type: 'folder', name: 'app', level: 0 },
+    { type: 'folder', name: 'about', level: 1 },
+    { type: 'page', name: 'about.tsx', level: 2 },
+    { type: 'folder', name: 'contact', level: 1 },
+    { type: 'page', name: 'contact.tsx', level: 2 },
+    { type: 'page', name: 'layout.tsx', level: 1 },
+  ]}
+/>
+
+So this layout applies to both contact and about pages. So we add a nav bar here so it shows up on both and doesn't need ot be imported or rendered for each page as it doesnt change per page.
+
+If you want to create a blog or course log like this, we will have a bit of a different setup which I will show in another course.
+
+## 4. Components
+
+Next.js uses react which is a really cool framework that uses components for styling and storing things. Instead of having files with 2000 lines of code, components break up each item on a page, store it in a separate place, then import it where needed. This means you can resuse cards, frames, buttons, etc. wherever you need them without writing the code for them again.
+
+<CodeWindow title="Terminal" isTerminal>
+  pnpm dlx shadcn@latest add button
+  pnpm dlx shadcn@latest add card
+  pnpm dlx shadcn@latest add input
+</CodeWindow>
+
+These are the 3 essentials every site needs out of the box. To use them just reference that you use shadecn button, card, and input components and add them in places you need. To find more components check out this site: [Entire Library Here](https://ui.shadcn.com/docs/components)
+
+## 5. 
+
+
+
+
+<PromptSection title="Copy this into Cursor / Windsurf">
+
+Create a highly modular Next.js folder structure.
+I need a 'features' folder in the root. 
+Inside 'features', create subfolders for 'auth', 'dashboard', and 'marketing'. 
+Each feature folder should have separate 'components', 'hooks', and 'actions' directories.
+
+</PromptSection>
+
+<CodeWindow title="app/page.tsx">
+
+```tsx
+export default function Page() {
+  const name = "Next.js";
+  return <h1>Hello {name}</h1>;
+}
+```
+</CodeWindow>
+
+## 5. Organization
+
+Finally, we need to know where to put our files so our project doesn't become a mess as it grows. We separate our **Pages** (what the user navigates to) from our **Components** (the building blocks used to build those pages).
+
+<RouteVisualizer
+  files={[
+    { type: 'folder', name: 'app', level: 0 },
+    { type: 'folder', name: 'components', level: 0 },
+    { type: 'folder', name: 'ui', level: 1 },
+    { type: 'page', name: 'button.tsx', level: 2 },
+    { type: 'page', name: 'navbar.tsx', level: 1 },
+    { type: 'folder', name: 'lib', level: 0 },
+    { type: 'page', name: 'utils.ts', level: 1 },
+  ]}
+/>
+
+* **app**: Only for pages and layouts. Keep logic here to a minimum.
+* **components/ui**: The shadcn primitives (Button, Card, Input).
+* **components**: Your custom site parts (Navbar, Footer, Hero Section).
+* **lib**: Helper functions and settings.
+
+This structure allows your app to grow to hundreds of pages without getting confusing. Now you are ready to start building!
+
+Instead of manually creating these folders one by one, we can use AI to set this up instantly.
+
+<PromptSection title="Copy this into Cursor / Windsurf">
+You are an expert Next.js Architect. Your goal is to initialize a scalable Next.js application following a strict "Feature-Based" architecture pattern. 
+
+Please execute the following 5-Step Foundation plan sequentially. Stop if you encounter errors, but otherwise proceed through all steps.
+
+Step 1: Initialization & Framework
+1. Initialize a new Next.js project in the current directory (or a folder named 'my-app' if the directory is not empty) using: `pnpm create next-app@latest . --yes`.
+   - Use TypeScript, Tailwind CSS, ESLint, and App Router.
+   - Do NOT use the `src/` directory (keep `app/` in root).
+2. Initialize shadcn/ui immediately after: `pnpm dlx shadcn@latest init`.
+   - Use "New York" style, "Zinc" base color, and CSS variables.
+
+Step 2: Component Installation
+Install the following essential shadcn components using `pnpm dlx shadcn@latest add`:
+- button
+- card
+- input
+
+Step 3: Folder Architecture (Crucial)
+Refactor the folder structure to be highly modular. Create the following directory tree:
+- /components/ui (Keep shadcn primitives here)
+- /components (For shared global components like Navbar, Footer)
+- /lib/utils.ts (Keep shadcn utils here)
+- /features (Create this root folder)
+  - /auth
+    - /components
+    - /hooks
+    - /actions
+  - /dashboard
+    - /components
+    - /hooks
+    - /actions
+  - /marketing
+    - /components
+    - /hooks
+- /actions
+
+Step 4: Styling
+Update `app/globals.css`. 
+- Remove the default Next.js Vercel background patterns.
+- Set the global background to white (`#ffffff`) and text to a dark slate (`#0f172a`) for a clean, modern aesthetic.
+- Ensure the font family is set to a standard clean sans-serif (Inter or system-ui).
+
+Step 5: Routes & Pages
+Create the following route structure in the `app` directory with basic placeholder content (Use a simple functional component for each):
+1. `app/about/page.tsx`: Title "About Us", styling: modern clean text.
+2. `app/contact/page.tsx`: Title "Contact", styling: modern clean text.
+3. Update `app/layout.tsx`: Ensure it wraps children correctly. (Bonus: If possible, add a placeholder Navbar in the layout that links to Home, About, and Contact).
+</PromptSection>
