@@ -1,36 +1,32 @@
 # Armstrong Academy
 
-A Next.js course platform for Armstrong Academy. Courses are authored in MDX and rendered with custom components.
+**Educational course platform** — Modern learning site for web development fundamentals. Users browse courses, follow step-by-step MDX lessons, and use copy-paste prompts to build while learning best practices.
 
-## Getting Started
+## Overview
 
-Install dependencies with pnpm:
+Armstrong Academy delivers structured, copy-paste–oriented lessons (e.g. “5-Step Foundation”) so learners can ship real components and pages while understanding the underlying patterns. Content is authored in MDX with custom interactive components; courses are loaded from the filesystem and rendered via the Next.js App Router.
 
-```bash
-pnpm install
-```
+## Highlights
 
-Run the development server:
-
-```bash
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Project Structure
-
-- **`app/`** – Next.js App Router pages (home, about, courses)
-- **`content/courses/`** – Course content in MDX (e.g. `5-step-foundation`)
-- **`components/`** – React components, including MDX components (`code-window`, `prompt-box`, `summary-card`, etc.)
-- **`lib/`** – Utilities and course loading logic
+- **MDX-driven courses** — Course content in MDX with custom components (code windows, prompt boxes, summary cards, route visualizer)
+- **Dynamic course routing** — File-based course discovery and `[slug]` dynamic routes with gray-matter front matter
+- **Component library** — Reusable UI (shadcn/ui–style) and MDX-specific components for consistent lesson UX
+- **App Router & server-side data** — Next.js 14+ App Router, server-side course loading, and type-safe course APIs
 
 ## Tech Stack
 
-- [Next.js](https://nextjs.org) (App Router)
-- [MDX](https://mdxjs.com) for course content
-- pnpm for package management
+| Area | Technologies |
+|------|--------------|
+| Framework | Next.js (App Router) |
+| Content | MDX, gray-matter |
+| UI | React, Tailwind CSS, shadcn/ui patterns |
+| Tooling | TypeScript, pnpm |
 
-## Deploy on Vercel
+## Getting Started
 
-Deploy with [Vercel](https://vercel.com/new?filter=next.js). Connect the repo and Vercel will detect the Next.js app and build with `pnpm`.
+```bash
+pnpm install
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). Course content lives in `content/courses/`; add or edit MDX there to extend the curriculum.
