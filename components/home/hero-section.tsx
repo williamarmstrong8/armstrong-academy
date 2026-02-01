@@ -14,7 +14,7 @@ export function HeroSection() {
         <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
         <span className="tracking-wide uppercase">System Operational</span>
         <span className="text-zinc-300">|</span>
-        <span>Updated for Next.js 15</span>
+        <span>Updated for Next.js 16</span>
       </div>
 
       {/* 2. Main Headline */}
