@@ -94,7 +94,7 @@ export function BentoGrid() {
             </div>
             
             <div className="flex flex-wrap gap-2 mt-4">
-               {['Next.js 14', 'TypeScript', 'Tailwind', 'Framer'].map((tech) => (
+               {['Next.js 16', 'TypeScript', 'Tailwind', 'Framer'].map((tech) => (
                  <span key={tech} className="px-3 py-1 bg-neutral-800 rounded-full text-xs font-mono text-neutral-300 border border-neutral-700">
                    {tech}
                  </span>

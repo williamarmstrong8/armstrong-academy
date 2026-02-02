@@ -23,8 +23,8 @@ export function Footer() {
           {/* Spacer Column (Optional) */}
           <div className="hidden lg:block lg:col-span-2" />
 
-          {/* Links Section (Span 6 cols - broken into 3 sub-columns) */}
-          <div className="lg:col-span-6 grid grid-cols-2 sm:grid-cols-3 gap-8">
+          {/* Links Section (Span 6 cols - right aligned) */}
+          <div className="lg:col-span-6 grid grid-cols-2 sm:grid-cols-3 gap-8 lg:justify-items-end">
             
             {/* Column: Marketplace */}
             <div className="flex flex-col gap-4">
@@ -65,10 +65,9 @@ export function Footer() {
           </p>
           
           <div className="flex items-center gap-4">
-            <SocialLink href="#" icon={<Twitter className="h-4 w-4" />} />
-            <SocialLink href="#" icon={<Github className="h-4 w-4" />} />
-            <SocialLink href="#" icon={<Linkedin className="h-4 w-4" />} />
-            <SocialLink href="#" icon={<Instagram className="h-4 w-4" />} />
+            <SocialLink href="https://x.com/armstrongwill8" icon={<Twitter className="h-4 w-4" />} />
+            <SocialLink href="https://github.com/williamarmstrong8" icon={<Github className="h-4 w-4" />} />
+            <SocialLink href="https://www.linkedin.com/in/william-armstrong8/" icon={<Linkedin className="h-4 w-4" />} />
           </div>
         </div>
       </div>

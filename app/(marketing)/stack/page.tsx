@@ -115,9 +115,9 @@ export default function StackPage() {
         </div>
       </section>
 
-      {/* 2. The Stack Grid */}
-      <div className="container mx-auto max-w-5xl px-6 py-24 space-y-24">
-        
+      {/* 2. The Stack Grid - same padding as header: outer px-6, inner max-w */}
+      <div className="px-6 py-24">
+        <div className="container mx-auto max-w-5xl space-y-24">
         {stackLayers.map((layer, layerIndex) => (
           <div key={layerIndex}>
             
@@ -174,7 +174,7 @@ export default function StackPage() {
             </div>
           </div>
         ))}
-
+        </div>
       </div>
 
       {/* 3. Bottom CTA */}
@@ -193,8 +193,7 @@ export default function StackPage() {
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="h-10 px-8 bg-zinc-900 text-white hover:bg-zinc-800 rounded-md" asChild>
-              <Link href="/courses/setup-the-stack">
-                <Terminal className="mr-2 h-4 w-4" />
+              <Link href="/courses/5-step-foundation">
                 Build the Foundation
               </Link>
             </Button>
