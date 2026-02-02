@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { Resend } from 'resend';
-import { neon } from '@neondatabase/serverless'; // ✅ Use this ONLY
+import { Resend } from 'resend'; // 👈 Import only, don't init yet
+import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// ❌ DELETE THIS LINE FROM THE TOP:
+// const resend = new Resend(process.env.RESEND_API_KEY);
+
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
@@ -25,32 +27,31 @@ export async function POST(req: Request) {
     const productId = session.metadata?.productId;
 
     if (productId && customerEmail) {
-      // 1. Generate a Unique Key
       const licenseKey = `key_${crypto.randomUUID()}`;
 
       try {
-        // 2. CONNECT TO NEON & SAVE
-        // ✅ Initialize the connection inside the handler
+        // 1. Connect to Neon
         const sql = neon(`${process.env.DATABASE_URL}`);
         
-        // Neon uses tagged template literals; params are safely parameterized
         await sql`
           INSERT INTO licenses (key, product_id, email) VALUES (${licenseKey}, ${productId}, ${customerEmail})
         `;
 
         console.log(`✅ Database: Saved license for ${customerEmail}`);
 
-        // 3. Send Email
+        // ✅ Initialize Resend INSIDE the function
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        // 2. Send Email
         await resend.emails.send({
-          from: 'onboarding@resend.dev', // ✅ REQUIRED field. Update this if you have a custom domain.
+          from: 'onboarding@resend.dev', // Update this if you have a custom domain
           to: customerEmail,
           subject: "Your License Key",
           html: `
-            <h1>Thank you for your order!</h1>
-            <p>Your license key is:</p>
-            <pre><strong>${licenseKey}</strong></pre>
+            <h1>Order Confirmed</h1>
+            <p>License Key: <strong>${licenseKey}</strong></p>
             <p>Run this to download:</p>
-            <pre>npx @yourname/cli create ${productId}</pre>
+            <pre>npx @william/saas-ui create ${productId}</pre>
           `
         });
 
