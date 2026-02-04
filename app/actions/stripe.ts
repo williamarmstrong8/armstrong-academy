@@ -2,10 +2,11 @@
 
 import { headers } from 'next/headers'
 import { stripe } from '@/lib/stripe'
+import { env } from '@/lib/env'
 
 export async function startCheckoutSession(productId: string) {
   const headersList = await headers()
-  const origin = headersList.get('origin') || 'http://localhost:3000'
+  const origin = headersList.get('origin') || env.NEXT_PUBLIC_SITE_URL
 
   // 1. Ask Stripe: "What is the active price for this Product ID?"
   const prices = await stripe.prices.list({

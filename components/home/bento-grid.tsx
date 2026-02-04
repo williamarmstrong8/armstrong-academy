@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Zap, Layers, Code2, Palette } from 'lucide-react';
+import { ArrowUpRight, Zap, Layers, Code2, Terminal } from 'lucide-react'; // Added Terminal icon
 import Link from 'next/link';
 
 export function BentoGrid() {
@@ -36,46 +36,50 @@ export function BentoGrid() {
         {/* The Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
           
-          {/* Card 1: The Marketplace (Large - Spans 2 cols) */}
+          {/* Card 1: Instant Setup */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="md:col-span-2 relative group overflow-hidden rounded-2xl bg-neutral-50 border border-neutral-200 p-8 flex flex-col justify-between hover:border-neutral-300 transition-colors"
+            className="md:col-span-2 relative rounded-2xl bg-neutral-50 border border-neutral-200 p-8 flex flex-col md:flex-row items-center justify-between gap-8 hover:border-neutral-300 transition-colors overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-neutral-100 to-transparent rounded-full blur-3xl -z-10" />
-            
-            <div className="relative z-10">
+            <div className="max-w-xs z-10">
               <div className="w-10 h-10 rounded-lg bg-white border border-neutral-200 flex items-center justify-center mb-4 shadow-sm">
-                <Layers className="w-5 h-5 text-neutral-700" />
+                <Terminal className="w-5 h-5 text-neutral-700" />
               </div>
-              <h3 className="text-2xl font-medium mb-2">The Marketplace</h3>
-              <p className="text-neutral-500 max-w-sm">
-                Access our internal library of premium, production-ready components. 
-                Steal our best work for your next project.
+              <h3 className="text-2xl font-medium mb-2">Instant Setup</h3>
+              <p className="text-neutral-500">
+                Skip the manual copying. Install any template directly into your codebase with our open-source CLI.
               </p>
+              <div className="mt-6 flex items-center gap-2">
+                <Link href="/docs" className="text-sm font-bold border-b border-neutral-900 pb-0.5 hover:opacity-70 transition-opacity">
+                   Read the Docs
+                </Link>
+              </div>
             </div>
 
-            {/* Visual Abstract for Marketplace */}
-            <div className="absolute right-[-20px] bottom-[-20px] md:right-8 md:bottom-8 opacity-50 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-500">
-               <div className="flex gap-4">
-                 <div className="w-32 h-20 bg-white rounded-lg border border-neutral-200 shadow-sm p-3">
-                    <div className="w-8 h-8 rounded-full bg-neutral-100 mb-2"/>
-                    <div className="w-16 h-2 bg-neutral-100 rounded-full"/>
-                 </div>
-                 <div className="w-32 h-20 bg-neutral-900 rounded-lg shadow-lg p-3 -mt-6">
-                    <div className="w-8 h-8 rounded-full bg-neutral-800 mb-2"/>
-                    <div className="w-16 h-2 bg-neutral-800 rounded-full"/>
-                 </div>
-               </div>
+            {/* Visual: Mock Terminal */}
+            <div className="w-full md:w-auto flex-1 max-w-sm">
+                <div className="bg-neutral-900 rounded-lg shadow-xl overflow-hidden border border-neutral-800">
+                    <div className="bg-neutral-800 px-3 py-2 flex gap-1.5">
+                        <div className="w-2.5 h-2.5 rounded-full bg-red-500"/>
+                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"/>
+                        <div className="w-2.5 h-2.5 rounded-full bg-green-500"/>
+                    </div>
+                    <div className="p-4 font-mono text-xs text-neutral-300 space-y-2">
+                        <div className="flex gap-2">
+                            <span className="text-green-400">➜</span>
+                            <span>~ npx @william/ui create</span>
+                        </div>
+                        <div className="text-neutral-500">Downloading template...</div>
+                        <div className="text-green-400">✓ Done in 1.2s</div>
+                    </div>
+                </div>
             </div>
-
-            <Link href="/products" className="absolute inset-0 z-20" aria-label="Go to marketplace" />
-            <ArrowUpRight className="absolute top-8 right-8 text-neutral-300 group-hover:text-neutral-900 transition-colors" />
           </motion.div>
 
-          {/* Card 2: Tech Stack (Tall - Row span 1) */}
+          {/* Card 2: Tech Stack */}
           <motion.div 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
@@ -123,40 +127,57 @@ export function BentoGrid() {
              </div>
              
              {/* Tiny Graph */}
-             <div className="flex items-end gap-1 h-8 mt-2">
-                <div className="w-2 bg-neutral-100 h-[40%] rounded-sm" />
-                <div className="w-2 bg-neutral-100 h-[60%] rounded-sm" />
-                <div className="w-2 bg-neutral-100 h-[30%] rounded-sm" />
-                <div className="w-2 bg-neutral-100 h-[80%] rounded-sm" />
-                <div className="w-2 bg-neutral-900 h-[100%] rounded-sm" />
+             <div className="flex items-end gap-0.5 h-8 mt-2 w-full">
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[35%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[50%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[45%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[65%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[55%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[70%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[60%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[85%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-neutral-200 h-[75%] rounded-sm" />
+                <div className="flex-1 min-w-0 bg-green-500 h-[100%] rounded-sm" />
              </div>
           </motion.div>
 
-          {/* Card 4: Design System (Large - Spans 2 cols) */}
+          {/* Card 4: The Marketplace */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="md:col-span-2 relative rounded-2xl bg-neutral-50 border border-neutral-200 p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 hover:border-neutral-300 transition-colors"
+            className="md:col-span-2 relative group overflow-hidden rounded-2xl bg-neutral-50 border border-neutral-200 p-8 flex flex-col justify-between hover:border-neutral-300 transition-colors"
           >
-            <div className="max-w-xs">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-neutral-100 to-transparent rounded-full blur-3xl -z-10" />
+            
+            <div className="relative z-10">
               <div className="w-10 h-10 rounded-lg bg-white border border-neutral-200 flex items-center justify-center mb-4 shadow-sm">
-                <Palette className="w-5 h-5 text-neutral-700" />
+                <Layers className="w-5 h-5 text-neutral-700" />
               </div>
-              <h3 className="text-2xl font-medium mb-2">Bespoke Agency Services</h3>
-              <p className="text-neutral-500">
-                We don't just sell components. We partner with select clients to build award-winning digital experiences.
+              <h3 className="text-2xl font-medium mb-2">The Marketplace</h3>
+              <p className="text-neutral-500 max-w-sm">
+                Access our internal library of premium, production-ready components. 
+                Steal our best work for your next project.
               </p>
-              <Link href="/contact" className="inline-flex items-center gap-2 mt-6 text-sm font-bold border-b border-neutral-900 pb-0.5 hover:opacity-70 transition-opacity">
-                Start a Project <ArrowUpRight size={14} />
-              </Link>
             </div>
 
-            {/* Visual: Typography Aa */}
-            <div className="h-full aspect-square bg-white border border-neutral-200 rounded-xl flex items-center justify-center shadow-sm">
-               <span className="text-7xl font-serif italic text-neutral-900">Aa</span>
+            {/* Visual Abstract for Marketplace */}
+            <div className="absolute right-[-20px] bottom-[-20px] md:right-8 md:bottom-8 opacity-50 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-500">
+               <div className="flex gap-4">
+                 <div className="w-32 h-20 bg-white rounded-lg border border-neutral-200 shadow-sm p-3">
+                    <div className="w-8 h-8 rounded-full bg-neutral-100 mb-2"/>
+                    <div className="w-16 h-2 bg-neutral-100 rounded-full"/>
+                 </div>
+                 <div className="w-32 h-20 bg-neutral-900 rounded-lg shadow-lg p-3 -mt-6">
+                    <div className="w-8 h-8 rounded-full bg-neutral-800 mb-2"/>
+                    <div className="w-16 h-2 bg-neutral-800 rounded-full"/>
+                 </div>
+               </div>
             </div>
+
+            <Link href="/products" className="absolute inset-0 z-20" aria-label="Go to marketplace" />
+            <ArrowUpRight className="absolute top-8 right-8 text-neutral-300 group-hover:text-neutral-900 transition-colors" />
           </motion.div>
 
         </div>

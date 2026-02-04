@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { Resend } from 'resend'; // 👈 Import only, don't init yet
+import { env } from "@/lib/env";
+import { Resend } from 'resend';
 import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
 
-// ❌ DELETE THIS LINE FROM THE TOP:
-// const resend = new Resend(process.env.RESEND_API_KEY);
-
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const endpointSecret = env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -18,46 +16,74 @@ export async function POST(req: Request) {
   try {
     event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
   } catch (err: any) {
-    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
+    console.error("❌ Stripe webhook signature verification failed:", err.message);
+    return NextResponse.json({ error: "Invalid webhook signature" }, { status: 400 });
   }
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as any;
     const customerEmail = session.customer_details?.email;
     const productId = session.metadata?.productId;
+    const sessionId = session.id; // 🔑 Stripe's unique session ID
 
     if (productId && customerEmail) {
-      const licenseKey = `key_${crypto.randomUUID()}`;
-
       try {
         // 1. Connect to Neon
-        const sql = neon(`${process.env.DATABASE_URL}`);
+        const sql = neon(env.DATABASE_URL);
         
+        // 🛡️ Check if this session was already processed
+        const existingLicense = await sql`
+          SELECT id FROM licenses WHERE stripe_session_id = ${sessionId}
+        `;
+
+        if (existingLicense.length > 0) {
+          console.log(`⚠️ Duplicate webhook ignored for session: ${sessionId}`);
+          return NextResponse.json({ received: true, message: "Already processed" });
+        }
+
+        // Generate license key
+        const licenseKey = `key_${crypto.randomUUID()}`;
+        
+        // 2. Insert license with session ID and set download limits
         await sql`
-          INSERT INTO licenses (key, product_id, email) VALUES (${licenseKey}, ${productId}, ${customerEmail})
+          INSERT INTO licenses (key, product_id, email, stripe_session_id, usage_count, max_uses, is_active) 
+          VALUES (${licenseKey}, ${productId}, ${customerEmail}, ${sessionId}, 0, 3, TRUE)
         `;
 
         console.log(`✅ Database: Saved license for ${customerEmail}`);
 
         // ✅ Initialize Resend INSIDE the function
-        const resend = new Resend(process.env.RESEND_API_KEY);
+        const resend = new Resend(env.RESEND_API_KEY);
 
-        // 2. Send Email
+        // 3. Send Email
         await resend.emails.send({
-          from: 'onboarding@resend.dev', // Update this if you have a custom domain
+          from: env.RESEND_FROM_EMAIL,
           to: customerEmail,
-          subject: "Your License Key",
+          subject: "Your Armstrong Academy License Key",
           html: `
-            <h1>Order Confirmed</h1>
-            <p>License Key: <strong>${licenseKey}</strong></p>
-            <p>Run this to download:</p>
-            <pre>npx @william/saas-ui create ${productId}</pre>
+            <h1>🎉 Order Confirmed!</h1>
+            <p>Thank you for your purchase. Here's your license key:</p>
+            <p><strong style="font-size: 18px; color: #0070f3;">${licenseKey}</strong></p>
+            <hr>
+            <h2>📦 Download Your Template</h2>
+            <p>Run this command in your terminal:</p>
+            <pre style="background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto;">npx @armstrong-academy/saas-kit create ${productId}</pre>
+            <p>When prompted, enter your license key above.</p>
+            <hr>
+            <p style="color: #666; font-size: 14px;">
+              You can download this template up to 3 times. Need help? Reply to this email.
+            </p>
           `
         });
 
-      } catch (error) {
-        console.error("❌ Database/Email Error:", error);
-        return NextResponse.json({ error: "Error saving license" }, { status: 500 });
+      } catch (error: any) {
+        console.error("❌ Database/Email Error:", {
+          error: error.message,
+          email: customerEmail,
+          productId: productId,
+          sessionId: sessionId
+        });
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
       }
     }
   }

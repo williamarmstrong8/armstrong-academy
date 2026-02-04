@@ -1,0 +1,195 @@
+---
+title: "Database Integration"
+description: "Connect your app to a real database, add login, and load data the right way, without getting lost in the weeds."
+difficulty: "Intermediate"
+---
+
+<Summary title="What we will build">
+
+So far we've built pages that show the same thing to everyone. To make an app that *remembers* things (user accounts, saved data, who's logged in), we need two pieces: a **database** (where data lives) and a way to **fetch that data when we need it**.
+
+We'll use **Supabase** as our database. Think of it as a hosted database that also handles sign-up and login for you, so you don't have to build auth from scratch. Under the hood it's **PostgreSQL** (a popular, reliable database), but Supabase gives you a nice dashboard and simple code so you can focus on building.
+
+In this course we'll stick to **server-side data fetching**. That means: when someone visits a page, the server (not the browser) talks to the database, gets the data, and then sends the finished page. Why? Because it's faster for the user, safer (your secret keys never go to the browser), and it's the pattern Next.js is built for. We won't use `useEffect` to load data on the client. We'll do it on the server instead.
+
+</Summary>
+
+## Why this setup?
+
+Next.js runs some code on the **server** (your machine or a host like Vercel) and some in the **browser**. Supabase needs to know *who* is making a request so it can show the right data and enforce security. That "who" is stored in **cookies**, small pieces of data the browser sends with every request. So we need a thin layer that says: "When Next.js runs on the server, use these cookies to create a Supabase client that acts as the logged-in user." That's what the `@supabase/ssr` package is for: it wires Supabase and Next.js together using cookies.
+
+## The file structure
+
+Here's the handful of files we'll add or touch. Don't worry about memorizing this; you'll see what each one does in the next sections.
+
+<RouteVisualizer
+  files={[
+    { type: 'folder', name: 'lib', level: 0 },
+    { type: 'folder', name: 'supabase', level: 1 },
+    { type: 'page', name: 'server.ts', level: 2 },
+    { type: 'page', name: 'client.ts', level: 2 },
+    { type: 'folder', name: 'app', level: 0 },
+    { type: 'folder', name: 'dashboard', level: 1 },
+    { type: 'page', name: 'page.tsx', level: 2 },
+    { type: 'page', name: '.env.local', level: 0 },
+  ]}
+/>
+
+- **`lib/supabase/server.ts`** – Used when your page or API runs on the server. It reads the request cookies so Supabase knows who the user is. This is where most of your data-fetching logic will live.
+- **`lib/supabase/client.ts`** – Used only in the browser, for things like real-time updates or button clicks that need to talk to Supabase. We keep this separate so the server code stays clean and secure.
+- **`app/dashboard/page.tsx`** – Example of a page that loads data from the database and only shows it to logged-in users.
+- **`.env.local`** – A file (you create it at the root of your project) where you store your Supabase URL and key. We never put secrets in your actual code. They go here, and Next.js reads them on the server.
+
+---
+
+## 1. The server client (the main piece)
+
+This file is the heart of your database layer. It creates a Supabase client that can read the **cookies** from the current request. Cookies are how the browser reminds the server "this person logged in earlier." So when we call `createClient()` inside a page or Server Action, we get a Supabase client that already knows who the user is. No extra steps.
+
+What the code is doing in plain terms: we grab the cookie store from Next.js, then we pass it into Supabase's `createServerClient`. Supabase uses that to read and update the auth cookies (for example when it refreshes the login token). The `getAll` and `setAll` functions are the bridge: Next gives us cookies, we hand them to Supabase in the shape it expects.
+
+<CodeWindow title="lib/supabase/server.ts">
+
+```ts
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+
+export async function createClient() {
+  const cookieStore = await cookies();
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // Ignored: The middleware handles refreshing tokens
+          }
+        },
+      },
+    }
+  );
+}
+```
+
+</CodeWindow>
+
+You'll put your real Supabase URL and anon key in `.env.local` as `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. The `!` tells TypeScript "we're sure these exist." The try/catch around `setAll` is there because sometimes cookies are set in middleware instead. We just ignore errors here so the app doesn't crash.
+
+---
+
+## 2. Loading data the right way (on the server)
+
+In older React patterns, you'd often use `useEffect` in the browser: load the page, then run JavaScript, then fetch data, then show it. That causes a delay (and sometimes a loading spinner) and can expose more logic than you want in the browser.
+
+In the App Router, we do the opposite: the **component runs on the server** and fetches data there. So by the time the user gets the HTML, the data is already in it. Faster and safer.
+
+The example below is a dashboard page. In words:
+
+1. Create a Supabase client (using our server client from above, so it knows who's logged in).
+2. Ask Supabase for the current user. If there isn't one, redirect to the login page. That way we never show private data to someone who isn't signed in.
+3. If there *is* a user, fetch whatever data we need (here we're just getting rows from a `courses` table).
+4. Render the page with that data.
+
+No `useEffect`, no loading state in the component. The server does the fetch, then sends the finished page.
+
+<CodeWindow title="app/dashboard/page.tsx">
+
+```tsx
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+
+export default async function DashboardPage() {
+  const supabase = await createClient();
+
+  // 1. Check Auth (Security)
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return redirect("/login");
+  }
+
+  // 2. Fetch Data (Parallelizable)
+  const { data: courses } = await supabase
+    .from("courses")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  return (
+    <main className="p-8">
+      <h1 className="text-2xl font-bold">Welcome, {user.email}</h1>
+      <div className="grid gap-4 mt-6">
+        {courses?.map((course) => (
+          <div key={course.id} className="border p-4 rounded-lg">
+            {course.title}
+          </div>
+        ))}
+      </div>
+    </main>
+  );
+}
+```
+
+</CodeWindow>
+
+If we had fetched this data in the browser with `useEffect`, the user would see: blank page → JavaScript loads → request goes out → data comes back → page updates. That's often called a "waterfall." With server-side fetching, the request happens before the page is sent, so the user gets the full page in one go.
+
+---
+
+## The AI prompt
+
+If you'd rather not wire every file by hand, you can use the prompt below in Cursor. It will install the packages, create the server and client Supabase helpers, and add middleware so login state stays in sync. You can tweak it to match your app name or routes.
+
+<PromptSection title="Copy this into Cursor">
+
+```
+# Role
+Principal Full-Stack Engineer specializing in Next.js 15 and Supabase.
+
+# Objective
+Integrate Supabase into the existing Next.js 15 application using the `@supabase/ssr` package.
+
+# Tech Stack
+- **Framework:** Next.js 15 (App Router)
+- **Database:** Supabase (PostgreSQL)
+- **Auth:** Supabase Auth
+- **Package:** `@supabase/ssr`
+
+# Execution Plan
+
+## Phase 1: Dependencies & Environment
+1. Install the required package: `pnpm add @supabase/ssr @supabase/supabase-js`
+2. Check for `.env.local`. If missing, create it.
+3. Ensure the following variables exist (ask me for the values if they are missing):
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+## Phase 2: Client Utilities
+Create the following files with strict adherence to Next.js 15 cookie handling:
+
+1. `lib/supabase/server.ts`
+   - Export an async function `createClient()`.
+   - Use `cookies()` from `next/headers`.
+   - Handle the `getAll` and `setAll` cookie methods correctly for the App Router.
+
+2. `lib/supabase/client.ts`
+   - Export a function `createClient()` for client-side usage (Browser Client).
+   - This should be a singleton if possible.
+
+## Phase 3: Middleware (Crucial for Auth)
+Create `middleware.ts` in the root.
+- It must update the Supabase session to keep the auth token alive.
+- If the user is unauthenticated and trying to access a protected route (e.g., `/dashboard`), redirect them to `/login`.
+
+# Instruction
+Generate the code for the helper files and the middleware. Do not generate UI components yet. Focus on the infrastructure.
+```
+
+</PromptSection>

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { neon } from '@neondatabase/serverless';
+import { env } from "@/lib/env";
 
 const FILE_MAP: Record<string, string> = {
   "prod_Ttv9MPW0ErPNBS": "saas-kit.zip", 
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
     const { productId, licenseKey } = await req.json();
     const cleanId = productId ? productId.trim() : "";
 
-    const sql = neon(`${process.env.DATABASE_URL}`);
+    const sql = neon(env.DATABASE_URL);
 
     // 1. ATOMIC UPDATE: Check limit AND increment in one step
     // This query tries to increase usage_count ONLY IF it is less than max_uses.
