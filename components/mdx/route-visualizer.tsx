@@ -4,17 +4,17 @@ import { ArrowRight, FileText, Folder, Globe, Layout } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface FileSystemItem {
-  type: "folder" | "layout" | "page";
+  type: "folder" | "layout" | "page" | "file";
   name: string;
   level?: number;
 }
 
 interface RouteVisualizerProps {
-  files: FileSystemItem[];
+  files?: FileSystemItem[];
   route?: string; // Made optional
 }
 
-export function RouteVisualizer({ files, route }: RouteVisualizerProps) {
+export function RouteVisualizer({ files = [], route }: RouteVisualizerProps) {
   const getIcon = (type: FileSystemItem["type"]) => {
     switch (type) {
       case "folder":
@@ -22,6 +22,7 @@ export function RouteVisualizer({ files, route }: RouteVisualizerProps) {
       case "layout":
         return <Layout className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />;
       case "page":
+      case "file":
         return <FileText className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />;
     }
   };

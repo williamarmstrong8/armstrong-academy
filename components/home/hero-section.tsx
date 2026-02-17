@@ -24,9 +24,8 @@ export function HeroSection() {
       </h1>
 
       {/* 3. Subheadline */}
-      <p className="max-w-xl mx-auto text-lg text-zinc-500 leading-relaxed mb-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-        Stop wrestling with boilerplate. Initialize a scalable, type-safe architecture 
-        designed to let you prompt-engineer your way to production.
+      <p className="max-w-2xl mx-auto text-lg text-zinc-500 leading-relaxed mb-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+        Skip the boring setup entirely. Describe what you want in plain language, and ship a real app fast. No more wrestling with configs or boilerplate.
       </p>
 
       {/* 4. CTA Buttons */}
