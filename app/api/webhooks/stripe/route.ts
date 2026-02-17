@@ -67,7 +67,7 @@ export async function POST(req: Request) {
             <hr>
             <h2>📦 Download Your Template</h2>
             <p>Run this command in your terminal:</p>
-            <pre style="background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto;">npx @armstrong-academy/saas-kit create ${productId}</pre>
+            <pre style="background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto;">npx @armstrong-academy/cli create ${productId}</pre>
             <p>When prompted, enter your license key above.</p>
             <hr>
             <p style="color: #666; font-size: 14px;">

@@ -177,7 +177,7 @@ Validates license and serves product ZIP:
 cd ../my-cli
 npm run build
 npm link
-saas-kit create prod_Ttv9MPW0ErPNBS
+armstrong-academy create prod_Ttv9MPW0ErPNBS
 # Enter test license key
 ```
 
