@@ -33,8 +33,8 @@ export function BentoGrid() {
           </motion.p>
         </div>
 
-        {/* The Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+        {/* The Grid — row height can grow on mobile so Instant Setup terminal isn't cropped */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(300px,auto)]">
           
           {/* Card 1: Instant Setup */}
           <motion.div 
@@ -42,32 +42,32 @@ export function BentoGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="md:col-span-2 relative rounded-2xl bg-neutral-50 border border-neutral-200 p-8 flex flex-col md:flex-row items-center justify-between gap-8 hover:border-neutral-300 transition-colors overflow-hidden"
+            className="md:col-span-2 relative rounded-2xl bg-neutral-50 border border-neutral-200 p-5 sm:p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6 md:gap-8 hover:border-neutral-300 transition-colors overflow-hidden min-h-0"
           >
-            <div className="max-w-xs z-10">
-              <div className="w-10 h-10 rounded-lg bg-white border border-neutral-200 flex items-center justify-center mb-4 shadow-sm">
-                <Terminal className="w-5 h-5 text-neutral-700" />
+            <div className="max-w-xs z-10 min-w-0 flex-shrink-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white border border-neutral-200 flex items-center justify-center mb-3 sm:mb-4 shadow-sm">
+                <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-700" />
               </div>
-              <h3 className="text-2xl font-medium mb-2">Instant Setup</h3>
-              <p className="text-neutral-500">
+              <h3 className="text-xl sm:text-2xl font-medium mb-2">Instant Setup</h3>
+              <p className="text-neutral-500 text-sm sm:text-base">
                 Skip the manual copying. Install any template directly into your codebase with our open-source CLI.
               </p>
-              <div className="mt-6 flex items-center gap-2">
+              <div className="mt-4 sm:mt-6 flex items-center gap-2">
                 <Link href="/courses" className="text-sm font-bold border-b border-neutral-900 pb-0.5 hover:opacity-70 transition-opacity">
                    Start Building
                 </Link>
               </div>
             </div>
 
-            {/* Visual: Mock Terminal */}
-            <div className="w-full md:w-auto flex-1 max-w-sm">
-                <div className="bg-neutral-900 rounded-lg shadow-xl overflow-hidden border border-neutral-800">
-                    <div className="bg-neutral-800 px-3 py-2 flex gap-1.5">
-                        <div className="w-2.5 h-2.5 rounded-full bg-red-500"/>
-                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"/>
-                        <div className="w-2.5 h-2.5 rounded-full bg-green-500"/>
+            {/* Visual: Mock Terminal — compact on mobile so it stays visible */}
+            <div className="w-full md:w-auto flex-1 min-w-0 min-h-[120px] flex items-end md:items-center">
+                <div className="w-full max-w-sm bg-neutral-900 rounded-lg shadow-xl overflow-hidden border border-neutral-800">
+                    <div className="bg-neutral-800 px-2 sm:px-3 py-1.5 sm:py-2 flex gap-1 sm:gap-1.5">
+                        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-red-500"/>
+                        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-yellow-500"/>
+                        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-green-500"/>
                     </div>
-                    <div className="p-4 font-mono text-xs text-neutral-300 space-y-2">
+                    <div className="p-3 sm:p-4 font-mono text-[10px] sm:text-xs text-neutral-300 space-y-1.5 sm:space-y-2">
                         <div className="flex gap-2">
                             <span className="text-green-400">➜</span>
                             <span>~ npx @william/ui create</span>

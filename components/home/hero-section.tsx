@@ -46,8 +46,8 @@ export function HeroSection() {
         </Button>
       </div>
 
-      {/* 5. Visual Hook: The Animated Window */}
-      <div className="relative w-full max-w-5xl mx-auto animate-in fade-in zoom-in-95 duration-1000 delay-200">
+      {/* 5. Visual Hook: The Animated Window — same card size, side-by-side at all breakpoints */}
+      <div className="relative w-full max-w-3xl mx-auto animate-in fade-in zoom-in-95 duration-1000 delay-200">
         {/* Glow Effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-gradient-to-r from-zinc-200/50 to-zinc-400/20 blur-[100px] -z-10 rounded-full" />
         <VibeCodingVisual />
@@ -82,13 +82,13 @@ function VibeCodingVisual() {
   }, []);
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white shadow-2xl overflow-hidden flex flex-col md:flex-row h-[480px] md:h-[500px]">
+    <div className="rounded-xl border border-zinc-200 bg-white shadow-2xl overflow-hidden flex flex-row w-full h-[400px]">
       
       {/* LEFT PANEL: The AI/Editor Interface */}
-      <div className="w-full md:w-[40%] bg-zinc-50 border-r border-zinc-200 p-6 flex flex-col relative transition-colors duration-500">
+      <div className="w-[40%] min-w-0 bg-zinc-50 border-r border-zinc-200 p-4 flex flex-col relative transition-colors duration-500 shrink-0">
          
          {/* Window Controls */}
-         <div className="flex gap-2 mb-6">
+         <div className="flex gap-2 mb-4">
             <div className="h-3 w-3 rounded-full bg-zinc-300"></div>
             <div className="h-3 w-3 rounded-full bg-zinc-300"></div>
             <div className="h-3 w-3 rounded-full bg-zinc-300"></div>
@@ -148,20 +148,20 @@ function VibeCodingVisual() {
             )}
          </div>
 
-         {/* UPDATED: Cleaner, Founder-Friendly Terminal UI */}
-         <div className="bg-zinc-950 rounded-lg border border-zinc-800 p-4 h-40 overflow-hidden relative flex flex-col shadow-inner">
+         {/* Terminal UI — hidden on mobile */}
+         <div className="hidden md:flex bg-zinc-950 rounded-lg border border-zinc-800 p-3 h-36 overflow-hidden relative flex-col shadow-inner min-h-0 flex-1">
             {/* Terminal Header */}
-            <div className="flex items-center gap-1.5 mb-4 absolute top-3 left-3 opacity-50">
-               <div className="h-2 w-2 rounded-full bg-zinc-600" />
-               <div className="h-2 w-2 rounded-full bg-zinc-600" />
-               <div className="h-2 w-2 rounded-full bg-zinc-600" />
+            <div className="flex items-center gap-1.5 mb-2 absolute top-2 left-2 opacity-50">
+               <div className="h-1.5 w-1.5 rounded-full bg-zinc-600" />
+               <div className="h-1.5 w-1.5 rounded-full bg-zinc-600" />
+               <div className="h-1.5 w-1.5 rounded-full bg-zinc-600" />
             </div>
-            <div className="absolute top-3 right-3 opacity-30">
-                 <Terminal size={12} className="text-zinc-500" />
+            <div className="absolute top-2 right-2 opacity-30">
+                 <Terminal size={10} className="text-zinc-500" />
             </div>
 
             {/* Human-Readable Logs */}
-            <div className="mt-6 space-y-2.5 font-mono text-[10px] md:text-[11px] leading-relaxed z-10">
+            <div className="mt-5 space-y-1.5 font-mono text-[9px] leading-relaxed z-10 overflow-y-auto flex-1 min-h-0">
                 <TerminalLogItem step={step} triggerStep={1} text="Analyzing prompt requirements..." />
                 <TerminalLogItem step={step} triggerStep={2} text="Scaffolding Next.js 16 architecture..." />
                 {/* We use CSS delays in the component to stagger these during step 2 */}
@@ -183,56 +183,56 @@ function VibeCodingVisual() {
       </div>
 
       {/* RIGHT PANEL: The "Product" (Output Preview) */}
-      <div className="w-full md:w-[60%] bg-zinc-100 relative overflow-hidden flex items-center justify-center p-8">
+      <div className="w-[60%] min-w-0 bg-zinc-100 relative overflow-hidden flex items-center justify-center p-4">
          
          {/* Abstract Grid Background */}
          <div className="absolute inset-0 w-full h-full opacity-[0.4] bg-[linear-gradient(to_right,#d4d4d8_1px,transparent_1px),linear-gradient(to_bottom,#d4d4d8_1px,transparent_1px)] bg-[size:24px_24px]" />
          
          {/* The UI Container */}
          <div className={cn(
-            "relative z-10 w-full max-w-full bg-white rounded-xl border border-zinc-200 shadow-2xl flex overflow-hidden transition-all duration-1000 ease-out",
+            "relative z-10 w-full max-w-full h-full bg-white rounded-xl border border-zinc-200 shadow-2xl flex overflow-hidden transition-all duration-1000 ease-out",
             step < 3 ? "opacity-0 translate-y-10 scale-95 blur-sm" : "opacity-100 translate-y-0 scale-100 blur-0"
          )}>
             
             {/* Sidebar */}
-            <div className="w-16 md:w-48 border-r border-zinc-100 bg-zinc-50/50 p-4 flex flex-col gap-4">
-               <div className="h-6 w-6 rounded bg-zinc-900 mb-4" />
-               <div className="space-y-3">
-                  <div className="h-2 w-20 bg-zinc-200 rounded-full" />
-                  <div className="h-2 w-16 bg-zinc-200 rounded-full" />
-                  <div className="h-2 w-24 bg-zinc-200 rounded-full" />
+            <div className="w-10 border-r border-zinc-100 bg-zinc-50/50 p-2 flex flex-col gap-2">
+               <div className="h-4 w-4 rounded bg-zinc-900 mb-2" />
+               <div className="space-y-2">
+                  <div className="h-1.5 w-12 bg-zinc-200 rounded-full" />
+                  <div className="h-1.5 w-10 bg-zinc-200 rounded-full" />
+                  <div className="h-1.5 w-14 bg-zinc-200 rounded-full" />
                </div>
-               <div className="mt-auto h-8 w-full bg-zinc-200/50 rounded-md" />
+               <div className="mt-auto h-6 w-full bg-zinc-200/50 rounded-md" />
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 p-6 bg-white flex flex-col">
+            <div className="flex-1 p-3 bg-white flex flex-col min-w-0">
                {/* Header */}
-               <div className="flex justify-between items-center mb-8">
+               <div className="flex justify-between items-center mb-4">
                   <div>
-                    <div className="h-4 w-32 bg-zinc-100 rounded-full mb-2" />
-                    <div className="h-2 w-20 bg-zinc-50 rounded-full" />
+                    <div className="h-2.5 w-20 bg-zinc-100 rounded-full mb-1" />
+                    <div className="h-1.5 w-14 bg-zinc-50 rounded-full" />
                   </div>
-                  <div className="h-8 w-8 rounded-full bg-zinc-100 border border-zinc-200" />
+                  <div className="h-6 w-6 rounded-full bg-zinc-100 border border-zinc-200 shrink-0" />
                </div>
 
                {/* Stats Grid */}
-               <div className="grid grid-cols-3 gap-4 mb-8">
+               <div className="grid grid-cols-3 gap-2 mb-4">
                   {[1, 2, 3].map((i) => (
-                      <div key={i} className="p-4 rounded-lg border border-zinc-100 bg-zinc-50/30">
-                         <div className="h-2 w-8 bg-zinc-200 rounded-full mb-3" />
-                         <div className="h-5 w-16 bg-zinc-900 rounded-md" />
+                      <div key={i} className="p-2 rounded-lg border border-zinc-100 bg-zinc-50/30 min-w-0">
+                         <div className="h-1.5 w-6 bg-zinc-200 rounded-full mb-2" />
+                         <div className="h-3 w-10 bg-zinc-900 rounded-md" />
                       </div>
                   ))}
                </div>
 
                {/* Activity Feed */}
-               <div className="flex-1 border border-dashed border-zinc-200 rounded-lg p-4">
-                  <div className="space-y-4">
+               <div className="flex-1 min-h-0 border border-dashed border-zinc-200 rounded-lg p-2">
+                  <div className="space-y-2">
                      {[1,2,3].map(k => (
-                        <div key={k} className="flex items-center gap-3">
-                           <div className="h-6 w-6 rounded-full bg-zinc-100 flex-shrink-0" />
-                           <div className="h-2 w-full bg-zinc-50 rounded-full" />
+                        <div key={k} className="flex items-center gap-2">
+                           <div className="h-4 w-4 rounded-full bg-zinc-100 flex-shrink-0" />
+                           <div className="h-1.5 w-full bg-zinc-50 rounded-full min-w-0" />
                         </div>
                      ))}
                   </div>
@@ -240,8 +240,8 @@ function VibeCodingVisual() {
             </div>
 
             {/* Floating "Live" Badge */}
-            <div className="absolute bottom-4 right-4 px-3 py-1 bg-white/90 backdrop-blur border border-zinc-200 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5 text-emerald-600 z-20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <div className="absolute bottom-2 right-2 px-2 py-0.5 bg-white/90 backdrop-blur border border-zinc-200 rounded-full text-[8px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1 text-emerald-600 z-20">
+                <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
                 Localhost:3000
             </div>
 
