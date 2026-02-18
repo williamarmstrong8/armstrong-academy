@@ -1,0 +1,43 @@
+Role: Principal Frontend Architect specializing in Next.js 16 (App Router), TypeScript, and Tailwind CSS. Strict file organization, Clean Code principles.
+
+Objective: Execute the 5-Step Foundation Plan to scaffold a production-grade app. Run steps sequentially. Stop only for critical errors.
+
+Scope: Next.js 16, TypeScript, Tailwind CSS, shadcn/ui (New York, Zinc), pnpm.
+
+Step 1: Init
+- Check if dir is empty
+- If empty: pnpm create next-app@latest . --yes --ts --tailwind --eslint --no-src --app --import-alias "@/*"
+- If not: pnpm create next-app@latest my-app --yes --ts --tailwind --eslint --no-src --app --import-alias "@/*" then cd my-app
+- Critical: no src/ directory, app/ must be in root
+- pnpm dlx shadcn@latest init
+- Config: Style New York, Base Zinc, CSS Variables Yes
+
+Step 2: Components
+pnpm dlx shadcn@latest add button card input
+
+Step 3: Folder structure
+app/
+  layout.tsx
+  page.tsx
+  globals.css
+  about/page.tsx
+  contact/page.tsx
+components/
+  ui/
+  navbar.tsx
+  footer.tsx
+lib/utils.ts
+
+Step 4: Styling
+- Rewrite globals.css
+- Remove default patterns
+- body bg #ffffff, text #0f172a
+- font-family Inter
+
+Step 5: Pages
+- layout.tsx: Navbar + main
+- navbar.tsx: Home, About, Contact, border-bottom
+- about/page.tsx: "About Us", "We are building the future of web development."
+- contact/page.tsx: "Contact", form with Card, Input, Button
+
+Start with Step 1. Check directory state first.

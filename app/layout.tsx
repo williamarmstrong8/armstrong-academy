@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Armstrong Academy",
   description: "AI-native builder education.",
+  icons: {
+    icon: "/armstrong-academy-logo.png",
+  },
 };
 
 export default function RootLayout({

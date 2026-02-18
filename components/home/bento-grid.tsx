@@ -53,8 +53,8 @@ export function BentoGrid() {
                 Skip the manual copying. Install any template directly into your codebase with our open-source CLI.
               </p>
               <div className="mt-6 flex items-center gap-2">
-                <Link href="/docs" className="text-sm font-bold border-b border-neutral-900 pb-0.5 hover:opacity-70 transition-opacity">
-                   Read the Docs
+                <Link href="/courses" className="text-sm font-bold border-b border-neutral-900 pb-0.5 hover:opacity-70 transition-opacity">
+                   Start Building
                 </Link>
               </div>
             </div>
@@ -176,7 +176,7 @@ export function BentoGrid() {
                </div>
             </div>
 
-            <Link href="/products" className="absolute inset-0 z-20" aria-label="Go to marketplace" />
+            <Link href="/marketplace" className="absolute inset-0 z-20" aria-label="Go to marketplace" />
             <ArrowUpRight className="absolute top-8 right-8 text-neutral-300 group-hover:text-neutral-900 transition-colors" />
           </motion.div>
 

@@ -58,7 +58,7 @@ export default function AboutPage() {
               <h3 className="text-xl font-medium mb-3">Foundation First</h3>
               <p className="text-zinc-500 leading-relaxed text-sm">
                 AI can write code, but it cannot decide your architecture. We focus on the "Day 1" 
-                setup—auth, database, and structure—that determines project success.
+                setup (auth, database, and structure) that determines project success.
               </p>
             </div>
 
@@ -106,7 +106,7 @@ export default function AboutPage() {
                 <p>
                   The landscape of web development has changed forever. Tools like Cursor, 
                   Windsurf, and v0 have made writing code trivial. The bottleneck is no 
-                  longer <span className="text-zinc-900 italic font-serif">typing</span>—it's <span className="text-zinc-900 italic font-serif">thinking</span>.
+                  longer <span className="text-zinc-900 italic font-serif">typing</span>. It's <span className="text-zinc-900 italic font-serif">thinking</span>.
                 </p>
                 <p>
                   Most tutorials still teach you how to center a div manually. We believe 

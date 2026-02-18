@@ -110,7 +110,7 @@ export default function StackPage() {
 
           <p className="text-xl text-zinc-500 leading-relaxed max-w-2xl font-light">
             We don't chase trends. We choose tools that maximize shipping speed and maintainability. 
-            This is the "Vibe Stack"—opinionated, type-safe, and AI-optimized.
+            This is the "Vibe Stack": opinionated, type-safe, and AI-optimized.
           </p>
         </div>
       </section>

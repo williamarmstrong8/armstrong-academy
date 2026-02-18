@@ -94,7 +94,7 @@ export default function SignupPage() {
         .
       </p>
 
-      <p className="px-8 text-center text-sm text-zinc-500 mt-4">
+      {/* <p className="px-8 text-center text-sm text-zinc-500 mt-4">
         Already have an account?{" "}
         <Link 
           href="/login" 
@@ -102,7 +102,7 @@ export default function SignupPage() {
         >
           Log in
         </Link>
-      </p>
+      </p> */}
     </>
   );
 }

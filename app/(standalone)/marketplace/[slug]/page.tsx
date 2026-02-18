@@ -149,13 +149,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         {/* Code / Actions Container */}
         <div className="flex-1 relative bg-zinc-50/30 flex flex-col min-h-0">
           
-          <div className="px-6 py-3 border-b border-zinc-100 flex items-center justify-between bg-white shrink-0">
+          <div className="px-6 py-3 border-b border-zinc-100 flex items-center bg-white shrink-0">
             <span className="text-xs font-mono font-medium text-zinc-400 uppercase tracking-wider">
                source.tsx
             </span>
-            {isFree && (
-               <CopyButton text={product.codeSnippet} label="Copy Raw" />
-            )}
           </div>
 
           {/* Code Block Container */}

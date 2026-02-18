@@ -98,7 +98,7 @@ export default function CoursesPage() {
               </div>
               <h3 className="text-xl font-medium text-zinc-900">No courses published yet</h3>
               <p className="text-zinc-500 max-w-sm mt-2">
-                Add <code>.mdx</code> files to your content directory to populate this grid.
+                Add <code>.md</code> files to <code>content/courses/</code> to populate this grid.
               </p>
             </div>
           )}

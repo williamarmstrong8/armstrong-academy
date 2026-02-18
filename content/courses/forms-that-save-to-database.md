@@ -4,13 +4,11 @@ description: "Let users type in a form, click Save, and have their data safely s
 difficulty: "Intermediate"
 ---
 
-<Summary title="What we will build">
-
-So far we've only *read* data (like showing a list of courses). Now we'll let users *write* data: update their profile, add a comment, or create something new.
-
-We'll do it with a form, a set of rules for what they can type, and a function that runs on the server when they click Save. The form will show "Saving..." while it's working and then show their new data without a full page refresh. No separate API or manual fetch code.
-
-</Summary>
+> **What we will build**
+>
+> So far we've only *read* data (like showing a list of courses). Now we'll let users *write* data: update their profile, add a comment, or create something new.
+>
+> We'll do it with a form, a set of rules for what they can type, and a function that runs on the server when they click Save. The form will show "Saving..." while it's working and then show their new data without a full page refresh. No separate API or manual fetch code.
 
 # When the User Clicks Save
 
@@ -29,9 +27,8 @@ Think of the server as the waiter.
 
 Before we save anything, we need rules. We don't want empty usernames or bios that are way too long. We use **Zod**, a small library that checks the data and gives clear error messages.
 
-<CodeWindow title="lib/schemas.ts">
-
 ```ts
+// lib/schemas.ts
 import { z } from "zod";
 
 // The "shape" of the data we allow
@@ -41,17 +38,14 @@ export const ProfileSchema = z.object({
 });
 ```
 
-</CodeWindow>
-
 ## 2. The Function That Runs When They Click Save
 
 This function runs **only on the server**. When the user submits the form, Next.js sends the form data here. We grab the values, run them through our Zod rules, and if everything looks good we save to the database. Then we tell Next.js to refresh the page so they see their new data.
 
 The line `"use server"` at the top tells Next.js: this function is only ever run on the server, never in the browser. That keeps your database and auth logic safe.
 
-<CodeWindow title="app/actions/update-profile.ts">
-
 ```ts
+// app/actions/update-profile.ts
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
@@ -84,15 +78,12 @@ export async function updateProfile(prevState: any, formData: FormData) {
 }
 ```
 
-</CodeWindow>
-
 ## 3. The Form and the Save Button
 
 The form lives in a Client Component (because it has buttons and inputs that the user interacts with). We use a hook called **useActionState** so we don't have to manage "is it saving?" and "did it work?" ourselves. It gives us: the result from the server (success or error), the function to run when they submit, and whether the request is still in progress. We wire the form's `action` to that function and show "Saving..." on the button while `isPending` is true.
 
-<CodeWindow title="components/profile-form.tsx">
-
 ```tsx
+// components/profile-form.tsx
 "use client";
 
 import { useActionState } from "react";
@@ -118,36 +109,10 @@ export function ProfileForm() {
 }
 ```
 
-</CodeWindow>
-
 ---
 
 ## The AI Prompt
 
 If you'd rather have Cursor generate the action and form for you, use the prompt below. Change the description in brackets to match what you're building (e.g. "updating a user profile" or "creating a new post").
 
-<PromptSection title="Copy this into Cursor">
-
-```
-# Role
-Next.js 15 Expert specializing in Server Actions and Zod Validation.
-
-# Task
-Create a Server Action to handle [Describe functionality, e.g., "Updating a User Profile"].
-
-# Requirements
-1. **Schema:** Create a Zod schema in \`lib/schemas.ts\` to validate the inputs.
-2. **Action:** Create a server action file \`app/actions/[name].ts\`.
-   - Use \`"use server"\` at the top.
-   - Validate inputs using the Zod schema.
-   - Authenticate the user using \`@/lib/supabase/server\`.
-   - Perform the database update.
-   - Return a strictly typed object: \`{ error?: string, success?: string }\`.
-   - Use \`revalidatePath\` to refresh the UI.
-3. **Component:** Create a Client Component form that uses the \`useActionState\` hook to call this action and handle loading/error states.
-
-# Context
-I am using shadcn/ui for components (Button, Input, Textarea).
-```
-
-</PromptSection>
+<div data-component="prompt-box" data-title="Copy this into Cursor" data-src="forms-that-save.txt"></div>

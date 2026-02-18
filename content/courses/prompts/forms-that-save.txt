@@ -1,0 +1,19 @@
+# Role
+Next.js 15 Expert specializing in Server Actions and Zod Validation.
+
+# Task
+Create a Server Action to handle [Describe functionality, e.g., "Updating a User Profile"].
+
+# Requirements
+1. **Schema:** Create a Zod schema in `lib/schemas.ts` to validate the inputs.
+2. **Action:** Create a server action file `app/actions/[name].ts`.
+   - Use `"use server"` at the top.
+   - Validate inputs using the Zod schema.
+   - Authenticate the user using `@/lib/supabase/server`.
+   - Perform the database update.
+   - Return a strictly typed object: `{ error?: string, success?: string }`.
+   - Use `revalidatePath` to refresh the UI.
+3. **Component:** Create a Client Component form that uses the `useActionState` hook to call this action and handle loading/error states.
+
+# Context
+I am using shadcn/ui for components (Button, Input, Textarea).

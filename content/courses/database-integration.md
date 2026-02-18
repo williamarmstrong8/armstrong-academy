@@ -4,15 +4,13 @@ description: "Connect your app to a real database, add login, and load data the 
 difficulty: "Intermediate"
 ---
 
-<Summary title="What we will build">
-
-So far we've built pages that show the same thing to everyone. To make an app that *remembers* things (user accounts, saved data, who's logged in), we need two pieces: a **database** (where data lives) and a way to **fetch that data when we need it**.
-
-We'll use **Supabase** as our database. Think of it as a hosted database that also handles sign-up and login for you, so you don't have to build auth from scratch. Under the hood it's **PostgreSQL** (a popular, reliable database), but Supabase gives you a nice dashboard and simple code so you can focus on building.
-
-In this course we'll stick to **server-side data fetching**. That means: when someone visits a page, the server (not the browser) talks to the database, gets the data, and then sends the finished page. Why? Because it's faster for the user, safer (your secret keys never go to the browser), and it's the pattern Next.js is built for. We won't use `useEffect` to load data on the client. We'll do it on the server instead.
-
-</Summary>
+> **What we will build**
+>
+> So far we've built pages that show the same thing to everyone. To make an app that *remembers* things (user accounts, saved data, who's logged in), we need two pieces: a **database** (where data lives) and a way to **fetch that data when we need it**.
+>
+> We'll use **Supabase** as our database. Think of it as a hosted database that also handles sign-up and login for you, so you don't have to build auth from scratch. Under the hood it's **PostgreSQL** (a popular, reliable database), but Supabase gives you a nice dashboard and simple code so you can focus on building.
+>
+> In this course we'll stick to **server-side data fetching**. That means: when someone visits a page, the server (not the browser) talks to the database, gets the data, and then sends the finished page. Why? Because it's faster for the user, safer (your secret keys never go to the browser), and it's the pattern Next.js is built for. We won't use `useEffect` to load data on the client. We'll do it on the server instead.
 
 ## Why this setup?
 
@@ -22,18 +20,7 @@ Next.js runs some code on the **server** (your machine or a host like Vercel) an
 
 Here's the handful of files we'll add or touch. Don't worry about memorizing this; you'll see what each one does in the next sections.
 
-<RouteVisualizer
-  files={[
-    { type: 'folder', name: 'lib', level: 0 },
-    { type: 'folder', name: 'supabase', level: 1 },
-    { type: 'page', name: 'server.ts', level: 2 },
-    { type: 'page', name: 'client.ts', level: 2 },
-    { type: 'folder', name: 'app', level: 0 },
-    { type: 'folder', name: 'dashboard', level: 1 },
-    { type: 'page', name: 'page.tsx', level: 2 },
-    { type: 'page', name: '.env.local', level: 0 },
-  ]}
-/>
+<div data-component="route-visualizer" data-files='[{"type":"folder","name":"lib","level":0},{"type":"folder","name":"supabase","level":1},{"type":"file","name":"server.ts","level":2},{"type":"file","name":"client.ts","level":2},{"type":"folder","name":"app","level":0},{"type":"folder","name":"dashboard","level":1},{"type":"file","name":"page.tsx","level":2},{"type":"file","name":".env.local","level":0}]'></div>
 
 - **`lib/supabase/server.ts`** – Used when your page or API runs on the server. It reads the request cookies so Supabase knows who the user is. This is where most of your data-fetching logic will live.
 - **`lib/supabase/client.ts`** – Used only in the browser, for things like real-time updates or button clicks that need to talk to Supabase. We keep this separate so the server code stays clean and secure.
@@ -48,9 +35,8 @@ This file is the heart of your database layer. It creates a Supabase client that
 
 What the code is doing in plain terms: we grab the cookie store from Next.js, then we pass it into Supabase's `createServerClient`. Supabase uses that to read and update the auth cookies (for example when it refreshes the login token). The `getAll` and `setAll` functions are the bridge: Next gives us cookies, we hand them to Supabase in the shape it expects.
 
-<CodeWindow title="lib/supabase/server.ts">
-
 ```ts
+// lib/supabase/server.ts
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
@@ -80,8 +66,6 @@ export async function createClient() {
 }
 ```
 
-</CodeWindow>
-
 You'll put your real Supabase URL and anon key in `.env.local` as `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. The `!` tells TypeScript "we're sure these exist." The try/catch around `setAll` is there because sometimes cookies are set in middleware instead. We just ignore errors here so the app doesn't crash.
 
 ---
@@ -101,9 +85,8 @@ The example below is a dashboard page. In words:
 
 No `useEffect`, no loading state in the component. The server does the fetch, then sends the finished page.
 
-<CodeWindow title="app/dashboard/page.tsx">
-
 ```tsx
+// app/dashboard/page.tsx
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -137,9 +120,7 @@ export default async function DashboardPage() {
 }
 ```
 
-</CodeWindow>
-
-If we had fetched this data in the browser with `useEffect`, the user would see: blank page → JavaScript loads → request goes out → data comes back → page updates. That's often called a "waterfall." With server-side fetching, the request happens before the page is sent, so the user gets the full page in one go.
+If we had fetched this data in the browser with `useEffect`, the user would see: blank page, JavaScript loads, request goes out, data comes back, page updates. That's often called a "waterfall." With server-side fetching, the request happens before the page is sent, so the user gets the full page in one go.
 
 ---
 
@@ -147,49 +128,4 @@ If we had fetched this data in the browser with `useEffect`, the user would see:
 
 If you'd rather not wire every file by hand, you can use the prompt below in Cursor. It will install the packages, create the server and client Supabase helpers, and add middleware so login state stays in sync. You can tweak it to match your app name or routes.
 
-<PromptSection title="Copy this into Cursor">
-
-```
-# Role
-Principal Full-Stack Engineer specializing in Next.js 15 and Supabase.
-
-# Objective
-Integrate Supabase into the existing Next.js 15 application using the `@supabase/ssr` package.
-
-# Tech Stack
-- **Framework:** Next.js 15 (App Router)
-- **Database:** Supabase (PostgreSQL)
-- **Auth:** Supabase Auth
-- **Package:** `@supabase/ssr`
-
-# Execution Plan
-
-## Phase 1: Dependencies & Environment
-1. Install the required package: `pnpm add @supabase/ssr @supabase/supabase-js`
-2. Check for `.env.local`. If missing, create it.
-3. Ensure the following variables exist (ask me for the values if they are missing):
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-
-## Phase 2: Client Utilities
-Create the following files with strict adherence to Next.js 15 cookie handling:
-
-1. `lib/supabase/server.ts`
-   - Export an async function `createClient()`.
-   - Use `cookies()` from `next/headers`.
-   - Handle the `getAll` and `setAll` cookie methods correctly for the App Router.
-
-2. `lib/supabase/client.ts`
-   - Export a function `createClient()` for client-side usage (Browser Client).
-   - This should be a singleton if possible.
-
-## Phase 3: Middleware (Crucial for Auth)
-Create `middleware.ts` in the root.
-- It must update the Supabase session to keep the auth token alive.
-- If the user is unauthenticated and trying to access a protected route (e.g., `/dashboard`), redirect them to `/login`.
-
-# Instruction
-Generate the code for the helper files and the middleware. Do not generate UI components yet. Focus on the infrastructure.
-```
-
-</PromptSection>
+<div data-component="prompt-box" data-title="Copy this into Cursor" data-src="database-integration.txt"></div>

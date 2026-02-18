@@ -1,0 +1,40 @@
+# Role
+Principal Full-Stack Engineer specializing in Next.js 15 and Supabase.
+
+# Objective
+Integrate Supabase into the existing Next.js 15 application using the `@supabase/ssr` package.
+
+# Tech Stack
+- **Framework:** Next.js 15 (App Router)
+- **Database:** Supabase (PostgreSQL)
+- **Auth:** Supabase Auth
+- **Package:** `@supabase/ssr`
+
+# Execution Plan
+
+## Phase 1: Dependencies & Environment
+1. Install the required package: `pnpm add @supabase/ssr @supabase/supabase-js`
+2. Check for `.env.local`. If missing, create it.
+3. Ensure the following variables exist (ask me for the values if they are missing):
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+## Phase 2: Client Utilities
+Create the following files with strict adherence to Next.js 15 cookie handling:
+
+1. `lib/supabase/server.ts`
+   - Export an async function `createClient()`.
+   - Use `cookies()` from `next/headers`.
+   - Handle the `getAll` and `setAll` cookie methods correctly for the App Router.
+
+2. `lib/supabase/client.ts`
+   - Export a function `createClient()` for client-side usage (Browser Client).
+   - This should be a singleton if possible.
+
+## Phase 3: Middleware (Crucial for Auth)
+Create `middleware.ts` in the root.
+- It must update the Supabase session to keep the auth token alive.
+- If the user is unauthenticated and trying to access a protected route (e.g., `/dashboard`), redirect them to `/login`.
+
+# Instruction
+Generate the code for the helper files and the middleware. Do not generate UI components yet. Focus on the infrastructure.

@@ -45,7 +45,7 @@ export function ProjectShowcase() {
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Header */}
-        <div className="mb-20 md:text-center max-w-3xl mx-auto">
+        {/* <div className="mb-20 md:text-center max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-medium tracking-tight mb-6">
             No more "To-Do" lists.
             <br />
@@ -55,21 +55,20 @@ export function ProjectShowcase() {
             Our projects are designed to be the cornerstone of your portfolio. 
             By the end of the course, you won't just have knowledge—you'll have a shipped product.
           </p>
-        </div>
+        </div> */}
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
         
-        {/* Github Link / Secondary CTA */}
         <div className="mt-16 text-center">
              <Link href="https://github.com" className="inline-flex items-center gap-2 text-sm font-bold text-neutral-400 hover:text-neutral-900 transition-colors border-b border-transparent hover:border-neutral-900 pb-0.5">
                 View Source Code on GitHub <ArrowUpRight size={14} />
              </Link>
-        </div>
+        </div> */}
 
       </div>
     </section>

@@ -11,7 +11,7 @@ export interface FileSystemItem {
 
 interface RouteVisualizerProps {
   files?: FileSystemItem[];
-  route?: string; // Made optional
+  route?: string;
 }
 
 export function RouteVisualizer({ files = [], route }: RouteVisualizerProps) {
@@ -29,15 +29,14 @@ export function RouteVisualizer({ files = [], route }: RouteVisualizerProps) {
 
   return (
     <div className="my-8 flex flex-col md:flex-row items-center justify-center gap-6 overflow-x-auto p-4">
-      
-      {/* File Structure Box */}
       <div className="w-full md:w-auto min-w-[200px] rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm overflow-hidden">
         {files.map((item, index) => (
           <div
             key={index}
             className={cn(
               "flex items-center gap-2 px-4 py-2.5",
-              index !== files.length - 1 && "border-b border-zinc-100 dark:border-zinc-900"
+              index !== files.length - 1 &&
+                "border-b border-zinc-100 dark:border-zinc-900"
             )}
             style={{ paddingLeft: `${(item.level || 0) * 1.25 + 1}rem` }}
           >
@@ -48,12 +47,9 @@ export function RouteVisualizer({ files = [], route }: RouteVisualizerProps) {
           </div>
         ))}
       </div>
-
-      {/* Only render arrow and route box if a route is provided */}
       {route && (
         <>
           <ArrowRight className="h-5 w-5 text-zinc-400 rotate-90 md:rotate-0" />
-
           <div className="w-full md:w-auto min-w-[150px] flex items-center gap-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm px-4 py-3">
             <Globe className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
             <span className="font-mono text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -62,7 +58,6 @@ export function RouteVisualizer({ files = [], route }: RouteVisualizerProps) {
           </div>
         </>
       )}
-
     </div>
   );
 }

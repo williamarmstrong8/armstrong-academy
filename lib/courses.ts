@@ -1,45 +1,43 @@
 import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
+import { join } from "path";
 
-const coursesDirectory = path.join(process.cwd(), "content/courses");
+const coursesDirectory = join(process.cwd(), "content", "courses");
+const promptsDirectory = join(process.cwd(), "content", "courses", "prompts");
+
+function expandPromptRefs(content: string): string {
+  const srcRegex = /<div data-component="prompt-box"([^>]*)data-src="([^"]+)"([^>]*)>\s*<\/div>/g;
+  return content.replace(srcRegex, (_, before, src, after) => {
+    const promptPath = join(promptsDirectory, src);
+    if (!fs.existsSync(promptPath)) return `<!-- prompt file not found: ${src} -->`;
+    const promptText = fs.readFileSync(promptPath, "utf8").trim();
+    const escaped = promptText
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+    return `<div data-component="prompt-box"${before}${after}><pre><code>${escaped}</code></pre></div>`;
+  });
+}
 
 export interface Course {
   slug: string;
   title: string;
   description: string;
+  difficulty?: string;
   content: string;
 }
 
-export function getAllCourses(): Course[] {
-  // Get folders within content/courses
+export function getCourseSlugs(): string[] {
   if (!fs.existsSync(coursesDirectory)) return [];
-  
-  const folders = fs.readdirSync(coursesDirectory);
-
-  const courses = folders.map((folder) => {
-    // According to your structure: content/courses/slug/slug.mdx
-    const fullPath = path.join(coursesDirectory, folder, `${folder}.mdx`);
-    
-    if (!fs.existsSync(fullPath)) return null;
-
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data } = matter(fileContents);
-
-    return {
-      slug: folder,
-      title: data.title,
-      description: data.description,
-      content: "", // We don't need raw content for the list view
-    };
-  });
-
-  // Filter out any nulls (folders without matching mdx)
-  return courses.filter((c): c is Course => c !== null);
+  return fs
+    .readdirSync(coursesDirectory)
+    .filter((name) => name.endsWith(".md"))
+    .map((name) => name.replace(/\.md$/, ""));
 }
 
 export function getCourseBySlug(slug: string): Course | null {
-  const fullPath = path.join(coursesDirectory, slug, `${slug}.mdx`);
+  const realSlug = slug.replace(/\.md$/, "");
+  const fullPath = join(coursesDirectory, `${realSlug}.md`);
 
   if (!fs.existsSync(fullPath)) {
     return null;
@@ -47,11 +45,21 @@ export function getCourseBySlug(slug: string): Course | null {
 
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
+  const expandedContent = expandPromptRefs(content);
 
   return {
-    slug,
-    title: data.title,
-    description: data.description,
-    content,
-  };
+    slug: realSlug,
+    title: data.title ?? "",
+    description: data.description ?? "",
+    difficulty: data.difficulty,
+    content: expandedContent,
+  } as Course;
+}
+
+export function getAllCourses(): Course[] {
+  const slugs = getCourseSlugs();
+  return slugs
+    .map((slug) => getCourseBySlug(slug))
+    .filter((c): c is Course => c !== null)
+    .sort((a, b) => a.title.localeCompare(b.title));
 }

@@ -124,12 +124,8 @@
   }
 }
 
-/* --- Syntax Highlighting & Code Styling --- */
+/* --- Code Styling --- */
 
-/* 1. Reset the figure and pre margins */
-figure[data-rehype-pretty-code-figure] {
-  margin: 0; 
-}
 pre {
   background-color: transparent !important;
   padding: 0;
@@ -148,25 +144,10 @@ pre {
   font-weight: 600; /* Bold is okay for inline chips */
 }
 
-/* 3. Style Block Code (The code inside your CodeWindow) */
+/* 3. Style Block Code */
 pre > code {
   background-color: transparent !important;
   color: inherit;
-  font-weight: 200; /* Normal weight for block code */
-  display: grid;
+  font-weight: 200;
   font-family: var(--font-mono); 
-}
-
-/* 4. Remove the gray line backgrounds from blocks */
-span[data-line] {
-  display: block;
-  padding: 0 0.2rem;
-  border-left: 2px solid transparent;
-  background-color: transparent !important; 
-}
-
-/* 5. Highlighted line style (optional) */
-span[data-highlighted-line] {
-  background-color: rgba(59, 130, 246, 0.1) !important;
-  border-left-color: #3b82f6;
 }

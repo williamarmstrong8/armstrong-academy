@@ -94,8 +94,6 @@ export const getPreviewComponent = (id: string, size?: 'card' | 'slug') => {
     case 'free-2': return <PreviewNavbar size={size} />;
     case 'free-3': return <PreviewFeature size={size} />;
     case 'paid-1': return <PreviewDashboard />;
-    case 'paid-2': return <div className="text-4xl font-serif text-neutral-800">Aa</div>;
-    case 'paid-3': return <div className="text-sm font-mono bg-neutral-100 px-2 py-1 rounded">Compare</div>;
     default: return null;
   }
 };

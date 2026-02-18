@@ -1,0 +1,53 @@
+# Role
+You are a Senior Next.js Architect. You are an expert in Node.js `fs` (file system), Markdown (remark), and Server React Components.
+
+# Objective
+Create a fully functional, type-safe blog engine using Markdown files as the data source.
+
+# Tech Stack
+- **Framework:** Next.js 16 (App Router)
+- **Content:** Markdown (via remark + remark-html)
+- **Metadata:** Gray-matter
+- **Styling:** Tailwind CSS + Typography Plugin
+
+# Instructions
+
+## Step 1: Install Dependencies
+Run the command to install necessary packages:
+`pnpm add remark remark-html remark-gfm gray-matter @tailwindcss/typography`
+
+## Step 2: Configure Tailwind
+Update `tailwind.config.ts` to include the typography plugin. This is critical for making the markdown look good (headings, paragraphs, lists) without manual styling.
+
+## Step 3: Create Content Directory
+1. Create a folder named `content` in the root directory.
+2. Create two sample Markdown files inside it:
+   - `hello-world.md`: Include frontmatter (title, date, description) and some sample markdown content.
+   - `architecture-guide.md`: Include a code block and a list in the markdown.
+
+## Step 4: Create the API Utility
+Create `lib/api.ts`. This file should export:
+1. `getPost(slug)`: Reads a specific file, parses frontmatter using `gray-matter`, and returns the data and raw content.
+2. `getAllPosts()`: Reads the `content` directory, returns an array of all posts sorted by date (newest first).
+*Constraint:* Ensure strict TypeScript typing for the Frontmatter object (title, date, description).
+
+## Step 5: Create markdownToHtml
+Create `lib/markdownToHtml.ts` that uses remark, remark-html, and remark-gfm to convert markdown strings to HTML.
+
+## Step 6: Create the Blog Index
+Create `app/blog/page.tsx`.
+- Fetch all posts using `getAllPosts()`.
+- Display them in a grid using shadcn Cards (or clean Tailwind).
+- Each card must link to `/blog/[slug]`.
+
+## Step 7: Create the Dynamic Post Page
+Create `app/blog/[slug]/page.tsx`.
+- **generateStaticParams**: Use this function to statically generate routes for every file in `content` at build time.
+- **Page Component**:
+  - Call `getPost(params.slug)`.
+  - Convert content with `markdownToHtml(content)`.
+  - Render the body using `dangerouslySetInnerHTML` or a wrapper component.
+  - Wrap the content in `prose` classes for Typography styling.
+
+# Execution
+Execute these steps sequentially. Do not ask for clarification unless a file path is ambiguous.

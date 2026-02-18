@@ -15,7 +15,7 @@ export function Footer() {
             <div>
               <h3 className="text-xl font-bold tracking-tight text-zinc-900">Armstrong Academy</h3>
               <p className="mt-2 text-zinc-500 leading-relaxed">
-                Beautifully designed components that you can copy and paste into your apps. Open source and accessible.
+                A teaching platform for builders who want to learn prompt-driven development. Free courses, real projects, and the skills to ship.
               </p>
             </div>
           </div>
